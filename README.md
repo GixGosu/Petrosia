@@ -114,16 +114,22 @@ See available models: `GET /api/models`
 
 ### Single Article
 
+Each article supports multiple languages. The `content` object is keyed by language code, and each language version gets its own embedding for semantic search:
+
 ```bash
 curl -X POST http://localhost:8000/api/articles \
   -H "Content-Type: application/json" \
   -d '{
     "slug": "returns-policy",
     "content": {
-      "en": {"title": "Returns Policy", "body": "You can return items within 30 days..."}
+      "en": {"title": "Returns Policy", "body": "You can return items within 30 days..."},
+      "es": {"title": "Política de Devoluciones", "body": "Puede devolver artículos dentro de 30 días..."},
+      "fr": {"title": "Politique de Retour", "body": "Vous pouvez retourner les articles dans les 30 jours..."}
     }
   }'
 ```
+
+When a user asks a question in Spanish, Petrosia matches against the Spanish content and answers in Spanish. No configuration needed — language routing happens automatically through embedding similarity.
 
 ### Bulk Import (JSON)
 
@@ -323,6 +329,7 @@ Full interactive API docs are available at:
 - **Embeddings** are always local (sentence-transformers, 384-dim) — no API cost for search
 - **LLM** is swappable per-request between local and cloud providers
 - **pgvector** handles semantic similarity search
+- **Multi-language** built in — each article stores content per language, each with its own embedding. Queries match the right language automatically
 
 ## Development
 
