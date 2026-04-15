@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petrosia Widget Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .demo-container {
+      background: white;
+      border-radius: 16px;
+      padding: 48px;
+      max-width: 800px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .logo h1 {
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    
+    .logo p {
+      color: #666;
+      font-size: 18px;
+    }
+    
+    .demo-content {
+      margin-top: 32px;
+    }
+    
+    .demo-section {
+      margin-bottom: 32px;
+    }
+    
+    .demo-section h2 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: #333;
+    }
+    
+    .demo-section p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    
+    .feature-list {
+      list-style: none;
+      margin-top: 16px;
+    }
+    
+    .feature-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      color: #444;
+    }
+    
+    .feature-list li:before {
+      content: "✓ ";
+      color: #667eea;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+    
+    .cta {
+      background: #667eea;
+      color: white;
+      padding: 16px 32px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 32px;
+    }
+    
+    .cta p {
+      color: white;
+      margin: 0;
+      font-size: 16px;
+    }
+    
+    code {
+      background: #f4f4f4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    
+    .highlight-box {
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <div class="logo">
+      <h1>Petrosia</h1>
+      <p>AI-Powered Knowledge Management</p>
+    </div>
+    
+    <div class="demo-content">
+      <div class="demo-section">
+        <h2>Welcome to the MVP Demo</h2>
+        <p>This page demonstrates the embeddable Petrosia chat widget. Look for the chat bubble in the bottom right corner!</p>
+        
+        <div class="highlight-box">
+          <strong>Try asking:</strong>
+          <ul style="margin-top: 12px; margin-left: 20px;">
+            <li>"How do I reset my password?"</li>
+            <li>"What payment methods do you accept?"</li>
+            <li>"How do I get a refund?"</li>
+            <li>"How do I get started?"</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="demo-section">
+        <h2>Key Features</h2>
+        <ul class="feature-list">
+          <li>Single script tag embed - just copy and paste</li>
+          <li>Streaming AI responses powered by RAG</li>
+          <li>Multi-language support (EN, JA, DE, and more)</li>
+          <li>Source citations from knowledge base</li>
+          <li>Graceful "I don't know" when info not available</li>
+          <li>No hallucinations - grounded in actual articles</li>
+          <li>Multi-provider LLM support (Claude, GPT, Gemini, Local)</li>
+        </ul>
+      </div>
+      
+      <div class="demo-section">
+        <h2>How to Embed</h2>
+        <p>Add this single line to any webpage:</p>
+        <code>&lt;script src="http://localhost:8000/static/widget/widget.js" data-api-url="http://localhost:8000"&gt;&lt;/script&gt;</code>
+        
+        <p style="margin-top: 16px;">That's it! No complex setup required.</p>
+      </div>
+      
+      <div class="cta">
+        <p><strong>👉 Click the chat bubble in the bottom right to start!</strong></p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Petrosia Widget -->
+  <script src="/static/widget/widget.js" data-api-url="http://localhost:8000"></script>
+</body>
+</html>

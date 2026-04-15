@@ -1,0 +1,83 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: petrosia-db
+    environment:
+      POSTGRES_USER: petrosia
+      POSTGRES_PASSWORD: petrosia123
+      POSTGRES_DB: petrosia
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U petrosia"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: petrosia-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: petrosia-ollama-pull
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    entrypoint: ["sh", "-c", "ollama pull qwen2.5:3b"]
+    restart: "no"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: petrosia-backend
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://petrosia:petrosia123@db:5432/petrosia
+      - DATABASE_URL_SYNC=postgresql://petrosia:petrosia123@db:5432/petrosia
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DEFAULT_LLM_PROVIDER=${DEFAULT_LLM_PROVIDER:-ollama}
+      - DEFAULT_LLM_MODEL=qwen2.5:3b
+      - CORS_ORIGINS=["http://localhost:8000", "http://localhost:3000"]
+      - REQUIRE_API_KEY=${REQUIRE_API_KEY:-false}
+      - RATE_LIMIT_READS=${RATE_LIMIT_READS:-60/minute}
+      - RATE_LIMIT_WRITES=${RATE_LIMIT_WRITES:-10/minute}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./widget:/app/static/widget
+      - ./admin:/app/static/admin
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama-pull:
+        condition: service_completed_successfully
+    command: >
+      sh -c "
+        cd /app/backend &&
+        python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+volumes:
+  postgres_data:
+  ollama_data:
