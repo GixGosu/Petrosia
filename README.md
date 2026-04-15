@@ -1,6 +1,14 @@
+<p align="center">
+  <img src="docs/petrosia-sponge.jpg" alt="Petrosia" width="200">
+</p>
+
 # Petrosia
 
 Knowledge base with a REST API. Search or ask questions. Your AI tools consume answers, not raw documents.
+
+<p align="center">
+  <img src="docs/petrosia-example.png" alt="Petrosia Demo" width="700">
+</p>
 
 ## Quick Start
 
